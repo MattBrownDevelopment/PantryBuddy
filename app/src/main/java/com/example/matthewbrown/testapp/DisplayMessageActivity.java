@@ -49,14 +49,16 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     public void submitList(View v)
     {
-        String FILENAME = "pantry";
+       // String FILENAME = "pantry";
         if(mEdit.getText().toString() != "") {
             FoodItem f1 = new FoodItem();
             f1.setItemName(mEdit.getText().toString());
             f1.setAmount((Double.valueOf(number1.getText().toString())));
             //Now submit it to the Pantry
         }
-        if(mEdit2.getText().toString() != "") {
+
+        //TODO: It crashes down here for some reason
+       if(mEdit2.getText().toString() != "") {
             FoodItem f2 = new FoodItem();
             f2.setItemName(mEdit2.getText().toString());
             f2.setAmount((Double.valueOf(number2.getText().toString())));
