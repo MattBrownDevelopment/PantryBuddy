@@ -79,36 +79,15 @@ public class DisplayMessageActivity extends AppCompatActivity {
             f1.setItemName(mEdit.getText().toString());
             f1.setAmount((Double.valueOf(number1.getText().toString())));
             //Now submit it to the Pantry
-            System.out.println("debug0");
             String filepath = getFilesDir().toString();
             try {
-                System.out.println("debug1");
                 File f = new File(filepath+"/data.txt");
-                System.out.println("debug1.1");
                 FileOutputStream fOut = new FileOutputStream(f);
-                //FileOutputStream fOut = openFileOutput(filepath+"/data.txt", MODE_WORLD_READABLE);
-                System.out.println("debug1.2");
                 OutputStreamWriter osw = new OutputStreamWriter(fOut);
-                System.out.println("debug2");
                 osw.write(f1.getItemName());
                 osw.flush();
                 osw.close();
-                System.out.println("debug3");
                 FileInputStream fIn = new FileInputStream(f);
-                //FileInputStream fIn = openFileInput(filepath+"/data.txt");
-                System.out.println("debug3.1");
-                InputStreamReader isr = new InputStreamReader(fIn);
-                System.out.println("debug3.2");
-                char[] inputBuffer = new char[f1.getItemName().length()];
-                System.out.println("debug4");
-                // Fill the Buffer with data from the file
-                isr.read(inputBuffer);
-                System.out.println("debug4.1");
-                // Transform the chars to a String
-                String readString = new String(inputBuffer);
-                System.out.println("debug4.2");
-                System.out.println(readString);
-                mEdit2.setText(readString);
             }
             catch(IOException ex)
             {
