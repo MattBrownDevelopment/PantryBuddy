@@ -11,6 +11,7 @@ import java.util.Iterator;
 public class CSV_Input {
     public Iterator itemIterator()
     {
+        //TODO: Do this.
     return null;
     }
 
@@ -32,5 +33,12 @@ public class CSV_Input {
         }
         toCSV.flush();
         toCSV.close();
+    }
+
+    public void writeToFile(String name, String amount, String daysLeft, String usagePerDay) throws IOException
+    {
+        int lineNumber = 0; //Will be used to know which line to go to
+        FileWriter toCSV = new FileWriter("pantryBuddyData.csv");
+        
     }
 }
