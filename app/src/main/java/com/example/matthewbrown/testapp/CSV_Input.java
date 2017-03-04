@@ -39,6 +39,14 @@ public class CSV_Input {
     {
         int lineNumber = 0; //Will be used to know which line to go to
         FileWriter toCSV = new FileWriter("pantryBuddyData.csv");
-        
+        toCSV.append(name);
+        toCSV.append(",");
+        toCSV.append(amount);
+        toCSV.append(",");
+        toCSV.append(daysLeft);
+        toCSV.append(",");
+        toCSV.append(usagePerDay);
+        toCSV.flush();
+        toCSV.close();
     }
 }
