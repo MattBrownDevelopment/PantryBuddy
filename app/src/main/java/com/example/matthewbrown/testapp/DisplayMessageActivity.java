@@ -81,13 +81,10 @@ public class DisplayMessageActivity extends AppCompatActivity {
             //Now submit it to the Pantry
             String filepath = getFilesDir().toString();
             try {
-                File f = new File(filepath+"/data.txt");
-                FileOutputStream fOut = new FileOutputStream(f);
-                OutputStreamWriter osw = new OutputStreamWriter(fOut);
-                osw.write(f1.getItemName());
-                osw.flush();
-                osw.close();
-                FileInputStream fIn = new FileInputStream(f);
+                CSV_IO writer = new CSV_IO();
+                writer.writeToFile(f1.getItemName(),Double.valueOf(f1.getAmount()).toString(),"","",filepath);
+
+                writer.readFile(filepath); //Used for debugging for now
             }
             catch(IOException ex)
             {
