@@ -71,7 +71,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void test()
     {
-
+    int x = 5;
+        System.out.println(x);
     }
 
 }
