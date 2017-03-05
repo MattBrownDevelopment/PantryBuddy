@@ -73,6 +73,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     {
     int x = 5;
     System.out.println(x);
+        System.out.println("hello");
     }
 
 }
