@@ -1,5 +1,6 @@
 package com.example.matthewbrown.testapp;
 
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
@@ -26,6 +27,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_QUANTITY = "_quantity";
     private static final String KEY_DATE_PURCHASED = "_dateBought";
     private static final String KEY_DAYS_LEFT = "_daysLeft";
+    private static final String KEY_USAGE_PERDAY = " _usagePerDay";
 
 
     public DatabaseHandler(Context context) {
@@ -37,7 +39,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         String CREATE_CONTACTS_TABLE = "CREATE TABLE " + PANTRY_TABLE + "("
                 + KEY_ID + " INTEGER PRIMARY KEY," + KEY_FOOD_NAME + " TEXT,"
-                + KEY_QUANTITY + " REAL" + KEY_DATE_PURCHASED + " TEXT" + KEY_DAYS_LEFT + " INTEGER" + ")";
+                + KEY_QUANTITY + " REAL" + KEY_DATE_PURCHASED + " TEXT" + KEY_DAYS_LEFT + " INTEGER" + KEY_USAGE_PERDAY + " REAL"
+        + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -50,4 +53,21 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         // Create tables again
         onCreate(db);
     }
+
+    public void addFood(FoodItem foodItem) {
+        SQLiteDatabase db = this.getWritableDatabase();
+
+        ContentValues values = new ContentValues();
+        values.put(KEY_FOOD_NAME, foodItem.getItemName()); // Food Name
+        values.put(KEY_QUANTITY, foodItem.getAmount());
+        //TODO: Implement the date functionality.
+     //   values.put(KEY_DATE_PURCHASED, foodItem.getAmount());
+       // values.put(KEY_USAGE_PERDAY, foodItem.getAmount());
+
+        // Inserting Row
+        db.insert(PANTRY_TABLE, null, values);
+        db.close(); // Closing database connection
+    }
+
+    
 }
