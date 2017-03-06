@@ -71,31 +71,30 @@ public class DisplayMessageActivity extends AppCompatActivity {
         client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }
 
-    public void submitList(View v) {
-       // String filePath = getFilesDir() + "/data.txt";
-       // File f = new File(filePath);
-        // String FILENAME = "pantry";
-        if (mEdit.getText().toString() != "") {
-            FoodItem f1 = new FoodItem();
-            f1.setItemName(mEdit.getText().toString());
-            f1.setAmount((Double.valueOf(number1.getText().toString())));
-            DatabaseHandler dbHandler = new DatabaseHandler(this);
-            dbHandler.addFood(f1);
-            //Now submit it to the Pantry
-           /* String filepath = getFilesDir().toString();
-            try {
-                CSV_IO writer = new CSV_IO();
-                writer.writeToFile(f1.getItemName(),Double.valueOf(f1.getAmount()).toString(),"","",filepath);
+    public void addLineToDB(EditText name, EditText number)
+    {
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
 
-                writer.readFile(filepath); //Used for debugging for now
-            }
-            catch(IOException ex)
-            {
-                System.out.println("error");
-                ex.printStackTrace();
-            }
-            */
+        if(!name.getText().toString().equals("") && !number.getText().toString().equals(""))
+        {
+            FoodItem f1 = new FoodItem();
+            f1.setItemName(name.getText().toString());
+            f1.setAmount((Double.valueOf(number.getText().toString())));
+            dbHandler.addFood(f1);
         }
+    }
+
+    public void submitList(View v) {
+
+
+            addLineToDB(mEdit, number1);
+
+            addLineToDB(mEdit2, number2);
+
+            addLineToDB(mEdit3, number3);
+
+            addLineToDB(mEdit4, number4);
+
     }
 
     public void deleteDB(View v)
