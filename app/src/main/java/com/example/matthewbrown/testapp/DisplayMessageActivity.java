@@ -78,8 +78,10 @@ public class DisplayMessageActivity extends AppCompatActivity {
             FoodItem f1 = new FoodItem();
             f1.setItemName(mEdit.getText().toString());
             f1.setAmount((Double.valueOf(number1.getText().toString())));
+            DatabaseHandler dbHandler = new DatabaseHandler(this);
+            dbHandler.addFood(f1);
             //Now submit it to the Pantry
-            String filepath = getFilesDir().toString();
+           /* String filepath = getFilesDir().toString();
             try {
                 CSV_IO writer = new CSV_IO();
                 writer.writeToFile(f1.getItemName(),Double.valueOf(f1.getAmount()).toString(),"","",filepath);
@@ -91,7 +93,13 @@ public class DisplayMessageActivity extends AppCompatActivity {
                 System.out.println("error");
                 ex.printStackTrace();
             }
+            */
         }
+    }
+
+    public void deleteDB(View v)
+    {
+
     }
 
 

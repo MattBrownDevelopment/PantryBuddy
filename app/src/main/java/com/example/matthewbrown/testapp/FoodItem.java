@@ -3,6 +3,7 @@ package com.example.matthewbrown.testapp;
 public class FoodItem {
 
     private String itemName;
+    private int ID;
     private double daysLeft;
     private double daysSincePurchased;
     private double usagePerDay;
@@ -21,6 +22,23 @@ public class FoodItem {
     {
         itemName = n;
         setAmount(qty);
+    }
+
+    public FoodItem(int i, String n, double qty)
+    {
+        ID = i;
+        itemName = n;
+        amount = qty;
+    }
+
+    public void setID(int i)
+    {
+        ID = i;
+    }
+
+    public int getID()
+    {
+        return ID;
     }
 
     public void buy(double qty)
