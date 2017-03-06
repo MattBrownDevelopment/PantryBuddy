@@ -69,11 +69,14 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close(); // Closing database connection
     }
 
+
+
     public void test()
     {
     int x = 5;
     System.out.println(x);
     System.out.println("hello");
+        System.out.println("where is github putting things");
     }
 
 }
