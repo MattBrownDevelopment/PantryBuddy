@@ -14,28 +14,45 @@ import java.util.ArrayList;
 
 public class ViewLoadPantry extends ListActivity {
 
-    static ArrayList<FoodItem> foods;
+    ArrayList<FoodItem> foods;
 
-    static String[] allFoods = new String[] {};
+    String[] allFoods = new String[0];
+
+    public void makeArray()
+    {
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
+        foods = dbHandler.getAllFoods();
+
+        for(int i = 0; i < foods.size(); i++)
+        {
+            System.out.println(foods.get(i).getItemName());
+            String temp = foods.get(i).getItemName() + "\t" + Double.valueOf(foods.get(i).getAmount()).toString();
+            String[] newArray = new String[allFoods.length+1];
+            java.lang.System.arraycopy(allFoods,0,newArray,0,allFoods.length);
+            allFoods = newArray;
+            allFoods[i] = temp;
+        }
+    }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        DatabaseHandler dbHandler = new DatabaseHandler(this);
-        foods = dbHandler.getAllFoods();
-        System.out.println(foods.size());
-        for(int i = 1; i < foods.size(); i++)
-        {
-            allFoods[i] = foods.get(i).getItemName() + foods.get(i).getAmount();
-        }
 
+        makeArray();
+
+        System.out.println("debug1");
         // no more this
         // setContentView(R.layout.list_fruit);
 
         setListAdapter(new ArrayAdapter<String>(this, R.layout.list_fruit,allFoods));
+        System.out.println("debug2");
 
         ListView listView = getListView();
+        System.out.println("debug3");
+
         listView.setTextFilterEnabled(true);
+        System.out.println("debug4");
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view,

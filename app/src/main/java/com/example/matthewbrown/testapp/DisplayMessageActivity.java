@@ -25,6 +25,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 
 import static com.example.matthewbrown.testapp.R.id.edit_text_item1;
 
@@ -99,7 +100,12 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     public void deleteDB(View v)
     {
-
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
+        ArrayList<FoodItem> foods = dbHandler.getAllFoods();
+        for(int i = 0; i < foods.size(); i++)
+        {
+            dbHandler.deleteContact(foods.get(i));
+        }
     }
 
 
