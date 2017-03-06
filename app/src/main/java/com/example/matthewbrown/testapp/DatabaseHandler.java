@@ -77,6 +77,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     System.out.println(x);
     System.out.println("hello");
         System.out.println("where is github putting things");
+        System.out.println("test");
     }
 
 }
