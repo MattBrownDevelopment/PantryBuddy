@@ -65,4 +65,13 @@ public class HomeScreen extends AppCompatActivity {
         intent.putExtra(EXTRA_MESSAGE, message);
         startActivity(intent);
     }
+
+    public void viewTrends(View view)
+    {
+        Intent intent = new Intent(this, ViewLoadPantry.class);
+        EditText editText = (EditText) findViewById(R.id.edit_message);
+        String message = editText.getText().toString();
+        intent.putExtra(EXTRA_MESSAGE, message);
+        startActivity(intent);
+    }
 }
