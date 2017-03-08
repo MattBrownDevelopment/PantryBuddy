@@ -23,10 +23,17 @@ public class ViewLoadPantry extends ListActivity {
         DatabaseHandler dbHandler = new DatabaseHandler(this);
         foods = dbHandler.getAllFoods();
 
+        System.out.println("entering for loop");
+        //Updates the days elapsed
+       /* for(int i = 0; i < foods.size(); i++)
+        {
+            dbHandler.updateItem(foods.get(i));
+        }
+*/
         for(int i = 0; i < foods.size(); i++)
         {
             System.out.println(foods.get(i).getItemName());
-            String temp = foods.get(i).getItemName() + "\t" + Double.valueOf(foods.get(i).getAmount()).toString();
+            String temp = foods.get(i).getItemName() + "\t" + Double.valueOf(foods.get(i).getAmount()).toString();// + foods.get(i).getDaysSincePurchased();
             String[] newArray = new String[allFoods.length+1];
             java.lang.System.arraycopy(allFoods,0,newArray,0,allFoods.length);
             allFoods = newArray;

@@ -6,6 +6,7 @@ public class FoodItem {
     private int ID;
     private double daysLeft;
     private double daysSincePurchased;
+    private String datePurchased;
     private double usagePerDay;
     private double amount;
     private double oldAmount;
@@ -29,6 +30,16 @@ public class FoodItem {
         ID = i;
         itemName = n;
         amount = qty;
+    }
+
+    public void setDatePurchased(String s)
+    {
+        datePurchased = s;
+    }
+
+    public String getDatePurchased()
+    {
+        return datePurchased;
     }
 
     public void setID(int i)

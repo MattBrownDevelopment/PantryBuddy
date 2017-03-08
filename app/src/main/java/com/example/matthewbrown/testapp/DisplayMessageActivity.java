@@ -107,6 +107,16 @@ public class DisplayMessageActivity extends AppCompatActivity {
         }
     }
 
+    /*public void addDays(View v)
+    {
+        DatabaseHandler dbHandler = new DatabaseHandler(this);
+        ArrayList<FoodItem> foods = dbHandler.getAllFoods();
+        for(int i = 0; i < foods.size(); i++)
+        {
+
+        }
+    }*/
+
 
 }
 
