@@ -80,6 +80,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
             FoodItem f1 = new FoodItem();
             f1.setItemName(name.getText().toString());
             f1.setAmount((Double.valueOf(number.getText().toString())));
+          //  f1.setDatePurchased();
             dbHandler.addFood(f1);
         }
     }

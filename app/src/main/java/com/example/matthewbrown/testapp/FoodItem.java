@@ -1,5 +1,9 @@
 package com.example.matthewbrown.testapp;
 
+import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class FoodItem {
 
     private String itemName;
@@ -13,6 +17,7 @@ public class FoodItem {
     private double oldDays;
     private boolean alreadyBought = false;
     private boolean trendFormed = false;
+    private double price;
 
     public FoodItem()
     {
@@ -30,6 +35,16 @@ public class FoodItem {
         ID = i;
         itemName = n;
         amount = qty;
+    }
+
+    public void setPrice(double p)
+    {
+        price = p;
+    }
+
+    public double getPrice()
+    {
+        return price;
     }
 
     public void setDatePurchased(String s)
@@ -79,6 +94,7 @@ public class FoodItem {
         this.itemName = itemName;
     }
     public double getDaysSincePurchased() {
+        calculateDaysSincePurchased();
         return daysSincePurchased;
     }
     public void setDaysSincePurchased(double d) {
@@ -111,6 +127,17 @@ public class FoodItem {
         return usagePerDay;
     }
 
+    private void calculateDaysSincePurchased()
+    {
+        Calendar c = Calendar.getInstance();
+        Date d = new Date(c.getTimeInMillis());
+        SimpleDateFormat sdf = new SimpleDateFormat(("MM-dd-yyyy"));
+        sdf.format(d.getTime());
+        double currentDate = Double.valueOf(sdf.toString().substring(3,5));
+        double dayBought = Double.valueOf(datePurchased.substring(3,5));
+        daysSincePurchased = currentDate - dayBought;
+
+    }
 
 
 }

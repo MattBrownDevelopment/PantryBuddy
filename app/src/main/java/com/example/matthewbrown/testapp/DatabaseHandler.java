@@ -22,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 6;
+    private static final int DATABASE_VERSION = 8;
 
     // Database Name
     private static final String DATABASE_NAME = "FoodStorageDB3";
@@ -38,6 +38,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String KEY_DAYS_LEFT = "_daysLeft";
     private static final String KEY_USAGE_PERDAY = " _usagePerDay";
     private static final String KEY_DAYS_ELAPSED = "_daysElapsed";
+    private static final String KEY_ITEM_PRICE = "_itemPrice";
+    private static final String KEY_ITEM_MILLIS = "_itemMillis";
 
 
     public DatabaseHandler(Context context) {
@@ -47,7 +49,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + PANTRY_TABLE + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_FOOD_NAME + " TEXT,"+ KEY_QUANTITY + " REAL," + KEY_DATE_PURCHASED + " TEXT," + KEY_DAYS_LEFT + " INTEGER," + KEY_USAGE_PERDAY + " REAL,"+ KEY_DAYS_ELAPSED + " TEXT" + ")";
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + PANTRY_TABLE + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_FOOD_NAME + " TEXT,"+ KEY_QUANTITY + " REAL," + KEY_DATE_PURCHASED + " TEXT," + KEY_DAYS_LEFT + " INTEGER," + KEY_USAGE_PERDAY + " REAL,"+ KEY_DAYS_ELAPSED + " TEXT," + KEY_ITEM_PRICE + " REAL " + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -110,9 +112,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 f1.setItemName(cursor.getString(1));
                 f1.setAmount(Double.valueOf(cursor.getString(2)));
                 f1.setDatePurchased(cursor.getString(3));
+//                f1.setPrice(Double.valueOf(cursor.getString(7)));
 
-
-                // Adding contact to list
                 foodList.add(f1);
             } while (cursor.moveToNext());
         }
