@@ -79,14 +79,15 @@ public class DatabaseHandler extends SQLiteOpenHelper {
             SQLiteDatabase db = this.getWritableDatabase();
             //TODO: If item is in DB, add the quantity and such.
             System.out.println("Item exists in the DB");
-            FoodItem tempFood = getFoodItem(foodItem.getItemName());
+            FoodItem tempFood = getFoodItem(foodItem.getItemName()); //In theory this will have grabbed everything we need
+            deleteContact(foodItem); //Maybe this won't break?
             //This stuff below will change
             //values.put(KEY_FOOD_NAME, foodItem.getItemName()); // Food Name
             double previousQuantity = tempFood.getAmount();
             //New amount is equal to previous amount + old amount
             values.put(KEY_QUANTITY, foodItem.getAmount() + previousQuantity);
             values.put(KEY_DATE_PURCHASED, sdf.format(d.getTime())) ;
-            long oldMilliseconds = foodItem.getNewMillis();
+            long oldMilliseconds = tempFood.getNewMillis();
             values.put(KEY_ITEM_MILLIS_OLD, oldMilliseconds);
             values.put(KEY_ITEM_MILLIS_NEW,milliSecondsCurrent);
             // Inserting Row
@@ -125,6 +126,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         }
     }
 
+    //Todo: Fix this.
     public FoodItem getFoodItem(String fieldValue) {
         SQLiteDatabase db = this.getReadableDatabase();
       /*  Cursor cursor = db.query(PANTRY_TABLE, new String[] { KEY_ID,
@@ -133,9 +135,9 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         Cursor cursor = null;
         String sql ="SELECT " + KEY_FOOD_NAME + " FROM "+PANTRY_TABLE+" WHERE _foodName = '"+fieldValue+"' ";
         cursor= db.rawQuery(sql,null);
-        if (cursor != null)
-            cursor.moveToFirst();
-        FoodItem f1 = new FoodItem( Integer.parseInt(cursor.getString(0)), (cursor.getString(1)), Double.valueOf((cursor.getString(2))));
+        cursor.moveToFirst();
+        System.out.println(cursor.getString(1));
+        FoodItem f1 = new FoodItem(  (cursor.getString(1)), Double.valueOf((cursor.getString(2))));
         f1.setOldMillis(Integer.parseInt(cursor.getString(8)));
         f1.setDatePurchased(cursor.getString(3));
         return f1;
@@ -179,6 +181,8 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         return cursor.getCount();
     }
 
+    //I hate this method and everything about it. Please kill me.
+    //Don't use this method. Shit will crash, yo.
     public int updateItem(FoodItem f1) {
         SQLiteDatabase db = this.getWritableDatabase();
 
@@ -212,10 +216,12 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     public void deleteContact(FoodItem contact) {
         SQLiteDatabase db = this.getWritableDatabase();
-        db.delete(PANTRY_TABLE, KEY_ID + " = ?",
-                new String[] { String.valueOf(contact.getID()) });
+        db.delete(PANTRY_TABLE, KEY_FOOD_NAME + " = ?",
+                new String[] { String.valueOf(contact.getItemName()) });
         db.close();
     }
+
+
 
 
 }
