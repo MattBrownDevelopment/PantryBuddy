@@ -22,7 +22,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
 
     // All Static variables
     // Database Version
-    private static final int DATABASE_VERSION = 8;
+    private static final int DATABASE_VERSION = 11;
 
     // Database Name
     private static final String DATABASE_NAME = "FoodStorageDB3";
@@ -31,15 +31,16 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     private static final String PANTRY_TABLE = "Pantry2";
 
     // Contacts Table Columns names
-    private static final String KEY_ID = "_id";
-    private static final String KEY_FOOD_NAME = "_foodName";
-    private static final String KEY_QUANTITY = "_quantity";
-    private static final String KEY_DATE_PURCHASED = "_dateBought";
-    private static final String KEY_DAYS_LEFT = "_daysLeft";
-    private static final String KEY_USAGE_PERDAY = " _usagePerDay";
-    private static final String KEY_DAYS_ELAPSED = "_daysElapsed";
-    private static final String KEY_ITEM_PRICE = "_itemPrice";
-    private static final String KEY_ITEM_MILLIS = "_itemMillis";
+    private static final String KEY_ID = "_id"; //0
+    private static final String KEY_FOOD_NAME = "_foodName"; //1
+    private static final String KEY_QUANTITY = "_quantity"; //2
+    private static final String KEY_DATE_PURCHASED = "_dateBought"; //3
+    private static final String KEY_DAYS_LEFT = "_daysLeft"; //4
+    private static final String KEY_USAGE_PERDAY = " _usagePerDay"; //5
+    private static final String KEY_DAYS_ELAPSED = "_daysElapsed"; //6
+    private static final String KEY_ITEM_PRICE = "_itemPrice"; //7
+    private static final String KEY_ITEM_MILLIS_OLD = "_itemMillisOld"; //8
+    private static final String KEY_ITEM_MILLIS_NEW = "_itemMillisNew"; //9
 
 
     public DatabaseHandler(Context context) {
@@ -49,7 +50,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     // Creating Tables
     @Override
     public void onCreate(SQLiteDatabase db) {
-        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + PANTRY_TABLE + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_FOOD_NAME + " TEXT,"+ KEY_QUANTITY + " REAL," + KEY_DATE_PURCHASED + " TEXT," + KEY_DAYS_LEFT + " INTEGER," + KEY_USAGE_PERDAY + " REAL,"+ KEY_DAYS_ELAPSED + " TEXT," + KEY_ITEM_PRICE + " REAL " + ")";
+        String CREATE_CONTACTS_TABLE = "CREATE TABLE " + PANTRY_TABLE + "("+ KEY_ID + " INTEGER PRIMARY KEY," + KEY_FOOD_NAME + " TEXT,"+ KEY_QUANTITY + " REAL," + KEY_DATE_PURCHASED + " TEXT," + KEY_DAYS_LEFT + " INTEGER," + KEY_USAGE_PERDAY + " REAL,"+ KEY_DAYS_ELAPSED + " TEXT," + KEY_ITEM_PRICE + " REAL," + KEY_ITEM_MILLIS_OLD + " REAL," + KEY_ITEM_MILLIS_NEW + " REAL " + ")";
         db.execSQL(CREATE_CONTACTS_TABLE);
     }
 
@@ -63,36 +64,80 @@ public class DatabaseHandler extends SQLiteOpenHelper {
     }
 
     public void addFood(FoodItem foodItem) {
-        SQLiteDatabase db = this.getWritableDatabase();
+
+
+        long milliSecondsCurrent = System.currentTimeMillis();
+
         Calendar c = Calendar.getInstance();
         Date d = new Date(c.getTimeInMillis());
         SimpleDateFormat sdf = new SimpleDateFormat(("MM-dd-yyyy"));
         ContentValues values = new ContentValues();
-        values.put(KEY_FOOD_NAME, foodItem.getItemName()); // Food Name
-        values.put(KEY_QUANTITY, foodItem.getAmount());
-        //TODO: Implement the date functionality.
-        System.out.println("debug1");
-        values.put(KEY_DATE_PURCHASED, sdf.format(d.getTime())) ;
-        System.out.println("debug2");
-      //  values.put(KEY_USAGE_PERDAY, foodItem.getAmount());
+        if(itemIsInDatabase(foodItem.getItemName())) //Old item
+        {
 
-        // Inserting Row
-        db.insert(PANTRY_TABLE, null, values);
-        db.close(); // Closing database connection
+            //TODO: If item is in database, construct temp foodItem object, delete row, then insert new one.
+            SQLiteDatabase db = this.getWritableDatabase();
+            //TODO: If item is in DB, add the quantity and such.
+            System.out.println("Item exists in the DB");
+            FoodItem tempFood = getFoodItem(foodItem.getItemName());
+            //This stuff below will change
+            //values.put(KEY_FOOD_NAME, foodItem.getItemName()); // Food Name
+            double previousQuantity = tempFood.getAmount();
+            //New amount is equal to previous amount + old amount
+            values.put(KEY_QUANTITY, foodItem.getAmount() + previousQuantity);
+            values.put(KEY_DATE_PURCHASED, sdf.format(d.getTime())) ;
+            long oldMilliseconds = foodItem.getNewMillis();
+            values.put(KEY_ITEM_MILLIS_OLD, oldMilliseconds);
+            values.put(KEY_ITEM_MILLIS_NEW,milliSecondsCurrent);
+            // Inserting Row
+            db.insert(PANTRY_TABLE, null, values);
+            db.close(); // Closing database connection
+        }
+        else if(!itemIsInDatabase(foodItem.getItemName())) //New item
+        {
+            SQLiteDatabase db = this.getWritableDatabase();
+            System.out.println("Item is not in DB");
+            values.put(KEY_FOOD_NAME, foodItem.getItemName()); // Food Name
+            values.put(KEY_QUANTITY, foodItem.getAmount());
+            values.put(KEY_DATE_PURCHASED, sdf.format(d.getTime())) ;
+            values.put(KEY_ITEM_MILLIS_NEW,milliSecondsCurrent);
+            // Inserting Row
+            db.insert(PANTRY_TABLE, null, values);
+            db.close(); // Closing database connection
+        }
+
+
     }
 
-
-    public FoodItem getFoodItem(int id) {
+    public boolean itemIsInDatabase(String fieldValue) {
         SQLiteDatabase db = this.getReadableDatabase();
+        Cursor cursor = null;
+        String sql ="SELECT " + KEY_FOOD_NAME + " FROM "+PANTRY_TABLE+" WHERE _foodName = '"+fieldValue+"' ";
+        cursor= db.rawQuery(sql,null);
+        if(cursor.getCount()>0){
+            cursor.close();
+            db.close();
+            return true;
+        }else{
+            cursor.close();
+            db.close();
+            return false;
+        }
+    }
 
-        Cursor cursor = db.query(PANTRY_TABLE, new String[] { KEY_ID,
+    public FoodItem getFoodItem(String fieldValue) {
+        SQLiteDatabase db = this.getReadableDatabase();
+      /*  Cursor cursor = db.query(PANTRY_TABLE, new String[] { KEY_ID,
                         KEY_FOOD_NAME, KEY_QUANTITY }, KEY_ID + "=?",
-                new String[] { String.valueOf(id) }, null, null, null, null);
+                new String[] { String.valueOf(id) }, null, null, null, null);*/
+        Cursor cursor = null;
+        String sql ="SELECT " + KEY_FOOD_NAME + " FROM "+PANTRY_TABLE+" WHERE _foodName = '"+fieldValue+"' ";
+        cursor= db.rawQuery(sql,null);
         if (cursor != null)
             cursor.moveToFirst();
-
         FoodItem f1 = new FoodItem( Integer.parseInt(cursor.getString(0)), (cursor.getString(1)), Double.valueOf((cursor.getString(2))));
-       // f1.setDaysSincePurchased();
+        f1.setOldMillis(Integer.parseInt(cursor.getString(8)));
+        f1.setDatePurchased(cursor.getString(3));
         return f1;
     }
 
@@ -112,6 +157,7 @@ public class DatabaseHandler extends SQLiteOpenHelper {
                 f1.setItemName(cursor.getString(1));
                 f1.setAmount(Double.valueOf(cursor.getString(2)));
                 f1.setDatePurchased(cursor.getString(3));
+
 //                f1.setPrice(Double.valueOf(cursor.getString(7)));
 
                 foodList.add(f1);
@@ -171,13 +217,5 @@ public class DatabaseHandler extends SQLiteOpenHelper {
         db.close();
     }
 
-    public void test()
-    {
-    int x = 5;
-    System.out.println(x);
-    System.out.println("hello");
-        System.out.println("where is github putting things");
-        System.out.println("test");
-    }
 
 }

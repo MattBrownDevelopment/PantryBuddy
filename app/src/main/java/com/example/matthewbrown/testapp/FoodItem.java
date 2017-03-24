@@ -18,6 +18,8 @@ public class FoodItem {
     private boolean alreadyBought = false;
     private boolean trendFormed = false;
     private double price;
+    private long oldMillis;
+    private long newMillis;
 
     public FoodItem()
     {
@@ -45,6 +47,26 @@ public class FoodItem {
     public double getPrice()
     {
         return price;
+    }
+
+    public long getOldMillis()
+    {
+        return oldMillis;
+    }
+
+    public void setOldMillis(long om)
+    {
+        oldMillis = om;
+    }
+
+    public long getNewMillis()
+    {
+        return newMillis;
+    }
+
+    public void setNewMillis(long nm)
+    {
+        newMillis = nm;
     }
 
     public void setDatePurchased(String s)
@@ -97,6 +119,8 @@ public class FoodItem {
         calculateDaysSincePurchased();
         return daysSincePurchased;
     }
+
+    //Todo: Implement based on number of milliseconds
     public void setDaysSincePurchased(double d) {
         daysSincePurchased = d;
         if(trendFormed)

@@ -48,6 +48,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_message);
 
@@ -73,6 +74,7 @@ public class DisplayMessageActivity extends AppCompatActivity {
 
     public void addLineToDB(EditText name, EditText number)
     {
+        //TODO: Remove special characters. Probably use regex.
         DatabaseHandler dbHandler = new DatabaseHandler(this);
 
         if(!name.getText().toString().equals("") && !number.getText().toString().equals(""))
